@@ -1,6 +1,6 @@
-import Post from '../models/post';
-import cuid from 'cuid';
-import sanitizeHtml from 'sanitize-html';
+const Post = require("../models/post");
+const cuid = require("cuid");
+const sanitizeHtml = require("sanitize-html");
 
 /**
  * Get all posts
@@ -8,7 +8,7 @@ import sanitizeHtml from 'sanitize-html';
  * @param res
  * @returns void
  */
-export function getPosts(req, res) {
+exports.getPosts = (req, res) => {
   Post.find().sort('-created_at').exec((err, posts) => {
     if (err) {
       res.status(500).send(err);
@@ -23,7 +23,7 @@ export function getPosts(req, res) {
  * @param res
  * @returns void
  */
-export function addPost(req, res) {
+exports.addPost = (req, res) => {
   if (!req.body.post.content) {
     res.status(403).end();
   }
@@ -49,7 +49,7 @@ export function addPost(req, res) {
  * @param res
  * @returns void
  */
-export function getPost(req, res) {
+exports.getPost = (req, res) => {
   Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
     if (err) {
       res.status(500).send(err);
@@ -64,7 +64,7 @@ export function getPost(req, res) {
  * @param res
  * @returns void
  */
-export function deletePost(req, res) {
+exports.deletePost = (req, res) => {
   Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
     if (err) {
       res.status(500).send(err);
