@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const postSchema = new Schema({
+const PostSchema = new Schema({
   cuid: { type: 'String', required: true },
   user_id: { type: 'Number', required: true },
   group_id: { type: 'Number', required: true },
@@ -11,7 +11,7 @@ const postSchema = new Schema({
 });
 
 // on every save, add the date
-TrackSchema.pre('save', function(next) {
+PostSchema.pre('save', function(next) {
   // get the current date
   var currentDate = new Date();
   
@@ -25,4 +25,5 @@ TrackSchema.pre('save', function(next) {
   next();
 });
 
-export default mongoose.model('Post', postSchema);
+// create the model for post and expose it to our app
+module.exports = mongoose.model('Post', PostSchema);

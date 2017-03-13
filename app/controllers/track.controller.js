@@ -1,7 +1,6 @@
 const Track = require("../models/track");
 const cuid = require("cuid");
 const sanitizeHtml = require("sanitize-html");
-const passport = require('../../config/passport');
 
 exports.getTracks = (req, res) => {
   Track.find().sort('-created_at').exec((err, tracks) => {
