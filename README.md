@@ -7,11 +7,12 @@
 1 - add `config/database`
 
 ## database file
-`config/database` looks something like this...
+Your `config/database.js` will look something like this... 
 ```
 module.exports = {
   'secret': 'apisecret',
   'database': 'mongodb://localhost/formedapi'
 };
 ```
+(see `example.database.js` too)
 the secret is used for the jwt encoding
