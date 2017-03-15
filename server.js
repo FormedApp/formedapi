@@ -162,5 +162,5 @@ apiRoutes.get(
 );
 
 
-app.use('/tracks', TrackRoutes);
-app.use('/posts', PostRoutes);
+app.use('/api/tracks', TrackRoutes);
+app.use('/api/posts', PostRoutes);
