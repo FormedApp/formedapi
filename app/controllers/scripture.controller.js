@@ -12,7 +12,7 @@ exports.getScriptures = (req, res) => {
 };
 
 exports.addScripture = (req, res) => {
-  if (!req.body.post.content) {
+  if (!req.body.scripture.content) {
     res.status(403).end();
   }
 
