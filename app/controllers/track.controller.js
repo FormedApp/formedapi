@@ -2,6 +2,12 @@ const Track = require("../models/track");
 const cuid = require("cuid");
 const sanitizeHtml = require("sanitize-html");
 
+/**
+ * Get all tracks
+ * @param req
+ * @param res
+ * @returns void
+ */
 exports.getTracks = (req, res) => {
   Track.find().sort('-created_at').exec((err, tracks) => {
     if (err) {
@@ -11,6 +17,12 @@ exports.getTracks = (req, res) => {
   });
 };
 
+/**
+ * Save a new track
+ * @param req
+ * @param res
+ * @returns void
+ */
 exports.addTrack = (req, res) => {
   if (!req.body.title) {
     res.status(403).end();
@@ -27,10 +39,23 @@ exports.addTrack = (req, res) => {
     if (err) {
       res.status(500).send(err);
     }
-    res.json({ track: "saved Track" });
+    res.json({ track: "Yay! Track added successfully." });
   });
 };
+/**
+ * Update a track
+ * @param req
+ * @param res
+ * @returns void
+ */
 
+
+/**
+ * Get a single track
+ * @param req
+ * @param res
+ * @returns void
+ */
 exports.getTrack = (req, res) => {
   Track.findOne({ cuid: req.params.cuid }).exec((err, track) => {
     if (err) {
@@ -40,6 +65,12 @@ exports.getTrack = (req, res) => {
   });
 };
 
+/**
+ * Delete a track
+ * @param req
+ * @param res
+ * @returns void
+ */
 exports.deleteTrack = (req, res) => {
   Track.findOne({ cuid: req.params.cuid }).exec((err, track) => {
     if (err) {
