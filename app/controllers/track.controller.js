@@ -42,13 +42,13 @@ exports.addTrack = (req, res) => {
     res.json({ track: "Yay! Track added successfully." });
   });
 };
+
 /**
  * Update a track
  * @param req
  * @param res
  * @returns void
  */
-
 
 /**
  * Get a single track
