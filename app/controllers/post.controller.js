@@ -33,8 +33,9 @@ exports.addPost = (req, res) => {
   // Let's sanitize inputs
   newPost.content = sanitizeHtml(newPost.content);
   newPost.cuid = cuid();
-  newPost.user_id = 1234;
-  newPost.group_id = 1;
+  newPost.user_id = req.user._id;
+  newPost.group_id = req.body.post.group_id;
+  newPost.activity_id = req.body.post.activity_id;
   newPost.save((err, saved) => {
     if (err) {
       res.status(500).send(err);
