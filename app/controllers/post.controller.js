@@ -28,13 +28,13 @@ exports.addPost = (req, res) => {
     res.status(403).end();
   }
 
-  const newPost = new Post(req.body.post);
+  const newPost = new Post(req.body);
 
   // Let's sanitize inputs
   newPost.content = sanitizeHtml(newPost.content);
   newPost.cuid = cuid();
-  newPost.user_id = 1234;
-  newPost.group_id = 1;
+  newPost.user_id = req.user._id;
+  newPost.group_id = sanitizeHtml(req.body.group_id);
   newPost.save((err, saved) => {
     if (err) {
       res.status(500).send(err);

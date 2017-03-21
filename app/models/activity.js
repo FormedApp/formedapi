@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const activitySchema = new Schema({
@@ -11,4 +11,4 @@ const activitySchema = new Schema({
   updated_at: { type: 'Date', default: Date.now, required: true },
 });
 
-export default mongoose.model('Activity', activitySchema);
+module.exports = mongoose.model('Activity', activitySchema);

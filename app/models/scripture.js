@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const scriptureSchema = new Schema({
@@ -15,5 +15,5 @@ const scriptureSchema = new Schema({
   updated_at: { type: 'Date', default: Date.now, required: true },
 });
 
-export default mongoose.model('Scripture', scriptureSchema);
+module.exports = mongoose.model('Scripture', scriptureSchema);
 
