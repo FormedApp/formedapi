@@ -12,17 +12,22 @@ exports.getScriptures = (req, res) => {
 };
 
 exports.addScripture = (req, res) => {
-  if (!req.body.scripture.content) {
+  if (!req.body.scripture.verse) {
     res.status(403).end();
   }
 
-  const newScripture = new Scripture(req.body.post);
+  const newScripture = new Scripture(req.body);
 
   // Let's sanitize inputs
-  newScripture.content = sanitizeHtml(newScripture.content);
   newScripture.cuid = cuid();
-  newScripture.user_id = 1234;
+  newScripture.user_id = req.user._id;
   newScripture.group_id = 1;
+  newScripture.verse = sanitizeHtml(newScripture.verse);
+  newScripture.passage = sanitizeHtml(newScripture.passage);
+  newScripture.book_name = sanitizeHtml(newScripture.book_name);
+  newScripture.chapter_id = sanitizeHtml(newScripture.chapter_id);
+  newScripture.verse_id = sanitizeHtml(newScripture.verse_id);
+  newScripture.verse_text = sanitizeHtml(newScripture.verse_text);
   newScripture.save((err, saved) => {
     if (err) {
       res.status(500).send(err);

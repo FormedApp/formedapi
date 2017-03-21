@@ -1,5 +1,6 @@
 const User = require('../models/user');
-const setUserInfo = require('../helpers').setUserInfo;
+const getToken = require('../helpers').getToken;
+const config = require('../../config/database')// get db config file
 
 //= =======================================
 // User Routes
@@ -41,3 +42,43 @@ exports.postUpdateGroupRoles = (req, res, next) => {
   });
   return null;
 };
+
+exports.getUsers = (req, res) => {
+    var token = getToken(req.headers);
+    if (token) {
+      var decoded = jwt.decode(token, config.secret);
+      User.findOne(
+        {
+          name: decoded.name
+        },
+        function(err, user) {
+          if (err) throw err;
+
+          if (!user) {
+            return res.status(403).send({
+              success: false,
+              msg: "Authentication failed. Wrong user."
+            });
+          } else { // User authenticated, get the list of all the users.
+
+            User.find(function(err, user) {
+              if (err) throw err;
+
+              if (!user) {
+                return res.status(403).send({
+                  success: false,
+                  msg: "Authentication failed. User not found."
+                });
+              } else {
+                res.json({ success: true, msg: user });
+              }
+            });
+          }
+        }
+      );
+    } else {
+      return res
+        .status(403)
+        .send({ success: false, msg: "No token provided." });
+    }
+  }

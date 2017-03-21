@@ -1,13 +1,15 @@
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/user');
-const mailgun = require('../config/mailgun');
+const config = require('../../config/database');
+const jwt = require("jwt-simple");
+//const mailgun = require('../config/mailgun');
 // const mailchimp = require('../config/mailchimp');
-const setUserInfo = require('../helpers').setUserInfo;
-const getRole = require('../helpers').getRole;
-const config = require('../config/main');
+//const setUserInfo = require('../helpers').setUserInfo;
+//const getRole = require('../helpers').getRole;
+//const config = require('../config/main');
 
-// Generate JWT
+/*// Generate JWT
 // TO-DO Add issuer and audience
 function generateToken(user) {
   return jwt.sign(user, config.secret, {
@@ -196,3 +198,55 @@ exports.verifyToken = (req, res, next) => {
     });
   });
 };
+*/
+exports.signup = (req, res) => {
+  if (!req.body.name || !req.body.password) {
+    res.json({ success: false, msg: "Please fill out the complete form." });
+  } else {
+    var newUser = new User({
+      name: req.body.name,
+      password: req.body.password
+    });
+
+    // save the user
+    newUser.save(function(err) {
+      if (err) {
+        return res.json({ success: false, msg: "Username already exists." });
+      }
+      res.json({ success: true, msg: "Successful created new user." });
+    });
+  }
+};
+
+exports.authenticate = (req, res) => {
+  User.findOne(
+    {
+      name: req.body.name
+    },
+    function(err, user) {
+      if (err) throw err;
+
+      if (!user) {
+        res.send({
+          success: false,
+          msg: "Authentication failed. User not found."
+        });
+      } else {
+        // check if password matches
+        user.comparePassword(req.body.password, function(err, isMatch) {
+          if (isMatch && !err) {
+            // if user is found and password is right create a token
+            var token = jwt.encode(user, config.secret);
+            // return the information including token as JSON
+            res.json({ success: true, token: "JWT " + token });
+          } else {
+            res.send({
+              success: false,
+              msg: "Authentication failed. Wrong password."
+            });
+          }
+        });
+      }
+    }
+  );
+}
