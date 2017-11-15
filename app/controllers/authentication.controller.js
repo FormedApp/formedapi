@@ -200,12 +200,15 @@ exports.verifyToken = (req, res, next) => {
 };
 */
 exports.signup = (req, res) => {
-  if (!req.body.name || !req.body.password) {
+  if (!req.body.username || !req.body.password || !req.body.user.email || !req.body.user.firstName || !req.body.user.lastName ) {
     res.json({ success: false, msg: "Please fill out the complete form." });
   } else {
     var newUser = new User({
-      name: req.body.name,
-      password: req.body.password
+      username: req.body.username,
+      password: req.body.password,
+      email: req.body.user.email,
+      firstName: req.body.user.firstName,
+      lastName: req.body.user.lastName,
     });
 
     // save the user
@@ -221,7 +224,7 @@ exports.signup = (req, res) => {
 exports.authenticate = (req, res) => {
   User.findOne(
     {
-      name: req.body.name
+      username: req.body.username
     },
     function(err, user) {
       if (err) throw err;
