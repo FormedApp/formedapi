@@ -200,11 +200,11 @@ exports.verifyToken = (req, res, next) => {
 };
 */
 exports.signup = (req, res) => {
-  if (!req.body.name || !req.body.password) {
+  if (!req.body.username || !req.body.password) {
     res.json({ success: false, msg: "Please fill out the complete form." });
   } else {
     var newUser = new User({
-      name: req.body.name,
+      username: req.body.username,
       password: req.body.password
     });
 
@@ -221,7 +221,7 @@ exports.signup = (req, res) => {
 exports.authenticate = (req, res) => {
   User.findOne(
     {
-      name: req.body.name
+      username: req.body.username
     },
     function(err, user) {
       if (err) throw err;
