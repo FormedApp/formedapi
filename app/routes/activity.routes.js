@@ -7,13 +7,13 @@ var AuthController = require('../controllers/passportAuth.controller');
 // Get all tracks
 router.get('/activities', AuthController.isAuthenticated, ActivityController.getActivities);
 
-// Get one track by cuid
-//router.get('/activities/:cuid', AuthController.isAuthenticated, ActivityController.getActivity);
+// Get one track by id
+router.get('/activities/:id', AuthController.isAuthenticated, ActivityController.getActivity);
 
 // Add a new Activity
-//router.post('/activities', AuthController.isAuthenticated, ActivityController.addActivity);
+router.post('/activities', AuthController.isAuthenticated, ActivityController.addActivity);
 
-// Delete a track by cuid
-//router.delete('/activities/:cuid', AuthController.isAuthenticated, ActivityController.deleteActivity);
+// Delete a track by id
+router.delete('/activities/:id', AuthController.isAuthenticated, ActivityController.deleteActivity);
 
 module.exports = router;

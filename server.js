@@ -19,6 +19,7 @@ const GroupRoutes = require('./app/routes/group.routes');
 const RoleRoutes = require('./app/routes/role.routes');
 const ScriptureRoutes = require('./app/routes/scripture.routes');
 const UserRoutes = require('./app/routes/user.routes');
+const JournalRoutes = require('./app/routes/authentication.routes');
 const AuthenticationRoutes = require('./app/routes/authentication.routes');
 
 // get our request parameters
@@ -44,7 +45,6 @@ console.log("There will be dragons: http://localhost:" + port);
 // connect to database
 mongoose.connect(config.database);
 
-
 // bundle our routes
 var apiRoutes = express.Router();
 
@@ -54,5 +54,5 @@ app.use('/api', PostRoutes);
 app.use('/api', RoleRoutes);
 app.use('/api', ScriptureRoutes);
 app.use('/api', TrackRoutes);
-//app.use('/api', UserRoutes);
+app.use('/api', JournalRoutes);
 app.use('/api', AuthenticationRoutes);

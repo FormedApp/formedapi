@@ -31,9 +31,8 @@ exports.addRole = (req, res) => {
   const newRole = new Role(req.body);
 
   // Let's sanitize inputs
-  newRole.cuid = cuid();
+  newRole.id = cuid();
   newRole.title = sanitizeHtml(nreq.body.title);
-  newRole.role_type = sanitizeHtml(nreq.body.role_type);
   newRole.created_by = req.user._id;
   newRole.save((err, saved) => {
     if (err) {
@@ -44,20 +43,13 @@ exports.addRole = (req, res) => {
 };
 
 /**
- * Update a role
- * @param req
- * @param res
- * @returns void
- */
-
-/**
  * Get a single role
  * @param req
  * @param res
  * @returns void
  */
 exports.getRole = (req, res) => {
-  Role.findOne({ cuid: req.params.cuid }).exec((err, role) => {
+  Role.findOne({ id: req.params.id }).exec((err, role) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -72,7 +64,7 @@ exports.getRole = (req, res) => {
  * @returns void
  */
 exports.deleteRole = (req, res) => {
-  Role.findOne({ cuid: req.params.cuid }).exec((err, role) => {
+  Role.findOne({ id: req.params.id }).exec((err, role) => {
     if (err) {
       res.status(500).send(err);
     }

@@ -32,7 +32,7 @@ exports.addPost = (req, res) => {
 
   // Let's sanitize inputs
   newPost.content = sanitizeHtml(newPost.content);
-  newPost.cuid = cuid();
+  newPost.id = cuid();
   newPost.user_id = req.user._id;
   newPost.group_id = sanitizeHtml(req.body.group_id);
   newPost.save((err, saved) => {
@@ -50,7 +50,7 @@ exports.addPost = (req, res) => {
  * @returns void
  */
 exports.getPost = (req, res) => {
-  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+  Post.findOne({ id: req.params.id }).exec((err, post) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -65,7 +65,7 @@ exports.getPost = (req, res) => {
  * @returns void
  */
 exports.deletePost = (req, res) => {
-  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+  Post.findOne({ id: req.params.id }).exec((err, post) => {
     if (err) {
       res.status(500).send(err);
     }

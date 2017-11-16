@@ -6,37 +6,29 @@ var bcrypt = require("bcrypt");
 
 // set up a mongoose model
 var UserSchema = new Schema({
-  username: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  firstName: {
-    type: String,
-    required: true
-  },
-  lastName: {
-    type: String,
-    required: true
-  },
-  username: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  password: {
-    type: String,
-    required: true
-  }
+  id: { type: String, unique: true, required: true },
+  username: { type: String, unique: true, required: true },
+  email: { type: String, unique: true, required: true },
+  first_name: { type: String, required: true },
+  last_name: { type: String, required: true },
+  groups: { type: Array },
+  roles: { type: Array },
+  password: { type: String, required: true },
+  created_at: { type: "Date", default: Date.now, required: true },
+  updated_at: { type: "Date", default: Date.now, required: true }
 });
 
 UserSchema.pre("save", function(next) {
   var user = this;
+  // get the current date
+  var currentDate = new Date();
+
+  // change the updated_at field to current date
+  this.updated_at = currentDate;
+
+  // if created_at doesn't exist, add to that field
+  if (!this.created_at) this.created_at = currentDate;
+
   if (this.isModified("password") || this.isNew) {
     bcrypt.genSalt(10, function(err, salt) {
       if (err) {
