@@ -19,7 +19,7 @@ const GroupRoutes = require('./app/routes/group.routes');
 const RoleRoutes = require('./app/routes/role.routes');
 const ScriptureRoutes = require('./app/routes/scripture.routes');
 const UserRoutes = require('./app/routes/user.routes');
-const JournalRoutes = require('./app/routes/authentication.routes');
+const JournalRoutes = require('./app/routes/journal.routes');
 const AuthenticationRoutes = require('./app/routes/authentication.routes');
 
 // get our request parameters

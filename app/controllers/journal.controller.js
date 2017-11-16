@@ -24,7 +24,7 @@ exports.getJournals = (req, res) => {
  * @returns void
  */
 exports.addJournal = (req, res) => {
-  if (!req.body.title) {
+  if (!req.body.entry) {
     res.status(403).end();
   }
 
@@ -32,9 +32,9 @@ exports.addJournal = (req, res) => {
 
   // Let's sanitize inputs
   newJournal.id = cuid();
-  newJournal.entry = sanitizeHtml(req.body.title);
-  newJournal.user_id = sanitizeHtml(req.body.receive);
-  newJournal.group_id = sanitizeHtml(req.body.respond);
+  newJournal.entry = sanitizeHtml(req.body.entry);
+  newJournal.user_id = req.user.id;
+  newJournal.groups = [];
   newJournal.save((err, saved) => {
     if (err) {
       res.status(500).send(err);
