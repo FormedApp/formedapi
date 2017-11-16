@@ -7,13 +7,13 @@ var AuthController = require('../controllers/passportAuth.controller');
 // Get all scriptures
 router.get('/scriptures', AuthController.isAuthenticated, ScriptureController.getScriptures);
 
-// Get one scripture by cuid
-router.get('/scriptures/:cuid', AuthController.isAuthenticated, ScriptureController.getScripture);
+// Get one scripture by id
+router.get('/scriptures/:id', AuthController.isAuthenticated, ScriptureController.getScripture);
 
 // Add a new scripture
 router.post('/scriptures', AuthController.isAuthenticated, ScriptureController.addScripture);
 
-// Delete a scripture by cuid
-router.delete('/scriptures/:cuid', AuthController.isAuthenticated, ScriptureController.deleteScripture);
+// Delete a scripture by id
+router.delete('/scriptures/:id', AuthController.isAuthenticated, ScriptureController.deleteScripture);
 
 module.exports = router;

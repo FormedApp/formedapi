@@ -19,7 +19,7 @@ exports.addScripture = (req, res) => {
   const newScripture = new Scripture(req.body);
 
   // Let's sanitize inputs
-  newScripture.cuid = cuid();
+  newScripture.id = cuid();
   newScripture.user_id = req.user._id;
   newScripture.group_id = 1;
   newScripture.verse = sanitizeHtml(newScripture.verse);
@@ -37,7 +37,7 @@ exports.addScripture = (req, res) => {
 };
 
 exports.getScripture = (req, res) => {
-  Scripture.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+  Scripture.findOne({ id: req.params.id }).exec((err, post) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -46,7 +46,7 @@ exports.getScripture = (req, res) => {
 };
 
 exports.deleteScripture = (req, res) => {
-  Scripture.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+  Scripture.findOne({ id: req.params.id }).exec((err, post) => {
     if (err) {
       res.status(500).send(err);
     }

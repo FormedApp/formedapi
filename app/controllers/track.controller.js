@@ -31,7 +31,7 @@ exports.addTrack = (req, res) => {
   const newTrack = new Track(req.body);
 
   // Let's sanitize inputs
-  newTrack.cuid = cuid();
+  newTrack.id = cuid();
   newTrack.title = req.body.title;
   newTrack.description = req.body.description;
   newTrack.created_by = req.user._id;
@@ -57,7 +57,7 @@ exports.addTrack = (req, res) => {
  * @returns void
  */
 exports.getTrack = (req, res) => {
-  Track.findOne({ cuid: req.params.cuid }).exec((err, track) => {
+  Track.findOne({ id: req.params.id }).exec((err, track) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -72,7 +72,7 @@ exports.getTrack = (req, res) => {
  * @returns void
  */
 exports.deleteTrack = (req, res) => {
-  Track.findOne({ cuid: req.params.cuid }).exec((err, track) => {
+  Track.findOne({ id: req.params.id }).exec((err, track) => {
     if (err) {
       res.status(500).send(err);
     }

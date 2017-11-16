@@ -31,9 +31,9 @@ exports.addGroup = (req, res) => {
   const newGroup = new Group(req.body);
 
   // Let's sanitize inputs
-  newGroup.cuid = cuid();
+  newGroup.id = cuid();
   newGroup.title = sanitizeHtml(req.body.title);
-  newGroup.created_by = req.user._id;
+  newGroup.created_by = req.user.id;
   newGroup.save((err, saved) => {
     if (err) {
       res.status(500).send(err);
@@ -56,7 +56,7 @@ exports.addGroup = (req, res) => {
  * @returns void
  */
 exports.getGroup = (req, res) => {
-  Group.findOne({ cuid: req.params.cuid }).exec((err, group) => {
+  Group.findOne({ id: req.params.id }).exec((err, group) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -71,7 +71,7 @@ exports.getGroup = (req, res) => {
  * @returns void
  */
 exports.deleteGroup = (req, res) => {
-  Group.findOne({ cuid: req.params.cuid }).exec((err, group) => {
+  Group.findOne({ id: req.params.id }).exec((err, group) => {
     if (err) {
       res.status(500).send(err);
     }

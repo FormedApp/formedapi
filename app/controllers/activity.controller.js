@@ -31,7 +31,7 @@ exports.addActivity = (req, res) => {
   const newActivity = new Activity(req.body);
 
   // Let's sanitize inputs
-  newActivity.cuid = cuid();
+  newActivity.id = cuid();
   newActivity.title = sanitizeHtml(req.body.title);
   newActivity.receive = sanitizeHtml(req.body.receive);
   newActivity.respond = sanitizeHtml(req.body.respond);
@@ -59,7 +59,7 @@ exports.addActivity = (req, res) => {
  * @returns void
  */
 exports.getActivity = (req, res) => {
-  Activity.findOne({ cuid: req.params.cuid }).exec((err, activity) => {
+  Activity.findOne({ id: req.params.id }).exec((err, activity) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -74,7 +74,7 @@ exports.getActivity = (req, res) => {
  * @returns void
  */
 exports.deleteActivity = (req, res) => {
-  Activity.findOne({ cuid: req.params.cuid }).exec((err, activity) => {
+  Activity.findOne({ id: req.params.id }).exec((err, activity) => {
     if (err) {
       res.status(500).send(err);
     }

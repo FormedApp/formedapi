@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
-  cuid: { type: 'String', required: true },
+  id: { type: 'String', required: true },
   user_id: { type: 'Number', required: true },
   group_id: { type: 'Number', required: true },
   content: { type: 'String', required: true },

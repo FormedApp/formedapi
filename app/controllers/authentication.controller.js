@@ -1,8 +1,9 @@
-//const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const User = require('../models/user');
-const config = require('../../config/database');
+const crypto = require("crypto");
+const User = require("../models/user");
+const Group = require("../models/group");
+const config = require("../../config/database");
 const jwt = require("jwt-simple");
+const cuid = require("cuid");
 //const mailgun = require('../config/mailgun');
 // const mailchimp = require('../config/mailchimp');
 //const setUserInfo = require('../helpers').setUserInfo;
@@ -200,15 +201,22 @@ exports.verifyToken = (req, res, next) => {
 };
 */
 exports.signup = (req, res) => {
-  if (!req.body.username || !req.body.password || !req.body.user.email || !req.body.user.firstName || !req.body.user.lastName ) {
+  if (
+    !req.body.username ||
+    !req.body.password ||
+    !req.body.user.email ||
+    !req.body.user.firstName ||
+    !req.body.user.lastName
+  ) {
     res.json({ success: false, msg: "Please fill out the complete form." });
   } else {
     var newUser = new User({
+      id: cuid(),
       username: req.body.username,
       password: req.body.password,
       email: req.body.user.email,
-      firstName: req.body.user.firstName,
-      lastName: req.body.user.lastName,
+      first_name: req.body.user.firstName,
+      last_name: req.body.user.lastName
     });
 
     // save the user
@@ -224,7 +232,14 @@ exports.signup = (req, res) => {
 exports.authenticate = (req, res) => {
   User.findOne(
     {
-      username: req.body.username
+      $or: [
+        {
+          username: req.body.username
+        },
+        {
+          email: req.body.username
+        }
+      ]
     },
     function(err, user) {
       if (err) throw err;
@@ -241,7 +256,27 @@ exports.authenticate = (req, res) => {
             // if user is found and password is right create a token
             var token = jwt.encode(user, config.secret);
             // return the information including token as JSON
-            res.json({ success: true, token: "JWT " + token });
+            Group.find({ id: { $in: user.groups } }, function(err, groups) {
+              if (err) {
+                res.send({
+                  success: false,
+                  msg: "Authentication failed. Group not found."
+                });
+              } else {
+                var result = {
+                  id: user.id,
+                  username: user.username,
+                  email: user.email,
+                  first_name: user.first_name,
+                  last_name: user.last_name,
+                  groups: groups,
+                  roles: user.roles,
+                  created_at: user.created_at,
+                  updated_at: user.updated_at
+                };
+                res.json({ user: result, token: "JWT " + token });
+              }
+            });
           } else {
             res.send({
               success: false,
@@ -252,4 +287,4 @@ exports.authenticate = (req, res) => {
       }
     }
   );
-}
+};
