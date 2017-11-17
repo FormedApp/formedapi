@@ -5,6 +5,7 @@ var TrackSchema = new Schema({
   id: { type: "String", required: true },
   title: { type: "String", required: true },
   description: { type: "String", required: true },
+  groups: { type: Array },
   created_by: { type: "String", required: true },
   created_at: { type: "Date", default: Date.now, required: true },
   updated_at: { type: "Date", default: Date.now, required: true }

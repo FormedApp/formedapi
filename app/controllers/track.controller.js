@@ -32,14 +32,19 @@ exports.addTrack = (req, res) => {
 
   // Let's sanitize inputs
   newTrack.id = cuid();
-  newTrack.title = req.body.title;
-  newTrack.description = req.body.description;
-  newTrack.created_by = req.user._id;
+  newTrack.title = sanitizeHtml(req.body.title);
+  newTrack.description = sanitizeHtml(req.body.description);
+  newTrack.created_by = req.user.id;
   newTrack.save((err, saved) => {
     if (err) {
       res.status(500).send(err);
     }
-    res.json({ track: "Yay! Track added successfully." });
+    Track.find().sort('-created_at').exec((err, tracks) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      res.json({ tracks });
+    });
   });
 };
 
@@ -78,8 +83,12 @@ exports.deleteTrack = (req, res) => {
     }
 
     track.remove(() => {
-      res.json({ msg: "Track Deleted" });
-      res.status(200).end();
+      Track.find().sort('-created_at').exec((err, tracks) => {
+        if (err) {
+          res.status(500).send(err);
+        }
+        res.json({ tracks });
+      });
     });
   });
 };

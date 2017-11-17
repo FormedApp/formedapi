@@ -4,7 +4,7 @@ var passport = require('passport');
 const JournalController = require('../controllers/journal.controller');
 var AuthController = require('../controllers/passportAuth.controller');
 
-// Get all tracks
+// Get all journals
 router.get('/journal', AuthController.isAuthenticated, JournalController.getJournals);
 
 // Get one track by id
