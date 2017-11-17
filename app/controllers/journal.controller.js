@@ -9,7 +9,7 @@ const sanitizeHtml = require("sanitize-html");
  * @returns void
  */
 exports.getJournals = (req, res) => {
-  Journal.find().sort('-created_at').exec((err, journals) => {
+  Journal.find({ user_id: req.user.id }).sort('-created_at').exec((err, journals) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -39,7 +39,12 @@ exports.addJournal = (req, res) => {
     if (err) {
       res.status(500).send(err);
     }
-    res.json({ journal: "Yay! Journal added successfully." });
+    Journal.find({ user_id: req.user.id }).sort('-created_at').exec((err, journals) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      res.json({ journals });
+    });
   });
 };
 
