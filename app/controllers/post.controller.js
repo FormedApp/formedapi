@@ -9,39 +9,51 @@ const sanitizeHtml = require("sanitize-html");
  * @returns void
  */
 exports.getPosts = (req, res) => {
-  Post.find().sort('-created_at').exec((err, posts) => {
+  Post.find({ user_id: req.user.id }).sort('-created_at').exec((err, posts) => {
     if (err) {
       res.status(500).send(err);
     }
     res.json({ posts });
   });
-}
+};
 
 /**
- * Save a post
+ * Save a new post
  * @param req
  * @param res
  * @returns void
  */
 exports.addPost = (req, res) => {
-  if (!req.body.post.content) {
+  if (!req.body.content) {
     res.status(403).end();
   }
 
   const newPost = new Post(req.body);
 
   // Let's sanitize inputs
-  newPost.content = sanitizeHtml(newPost.content);
   newPost.id = cuid();
-  newPost.user_id = req.user._id;
-  newPost.group_id = sanitizeHtml(req.body.group_id);
+  newPost.content = sanitizeHtml(req.body.content);
+  newPost.user_id = req.user.id;
+  newPost.groups = "";
   newPost.save((err, saved) => {
     if (err) {
       res.status(500).send(err);
     }
-    res.json({ post: saved });
+    Post.find({ user_id: req.user.id }).sort('-created_at').exec((err, posts) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      res.json({ posts });
+    });
   });
-}
+};
+
+/**
+ * Update a post
+ * @param req
+ * @param res
+ * @returns void
+ */
 
 /**
  * Get a single post
@@ -56,7 +68,7 @@ exports.getPost = (req, res) => {
     }
     res.json({ post });
   });
-}
+};
 
 /**
  * Delete a post
@@ -71,7 +83,8 @@ exports.deletePost = (req, res) => {
     }
 
     post.remove(() => {
+      res.json({ msg: "Post Deleted" });
       res.status(200).end();
     });
   });
-}
+};
