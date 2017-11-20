@@ -1,3 +1,4 @@
+const Activity = require("../models/activity");
 const Track = require("../models/track");
 const cuid = require("cuid");
 const sanitizeHtml = require("sanitize-html");
@@ -9,12 +10,23 @@ const sanitizeHtml = require("sanitize-html");
  * @returns void
  */
 exports.getTracks = (req, res) => {
-  Track.find().sort('-created_at').exec((err, tracks) => {
-    if (err) {
-      res.status(500).send(err);
+  Track.aggregate([
+    {
+      $lookup: {
+        from: "activities", // collection name in db
+        localField: "id",
+        foreignField: "track_id",
+        as: "activities"
+      }
     }
-    res.json({ tracks });
-  });
+  ])
+    .sort("-created_at")
+    .exec(function(err, tracks) {
+      if (err) {
+        res.status(500).send(err);
+      }
+      res.json({ tracks });
+    });
 };
 
 /**
@@ -39,21 +51,16 @@ exports.addTrack = (req, res) => {
     if (err) {
       res.status(500).send(err);
     }
-    Track.find().sort('-created_at').exec((err, tracks) => {
-      if (err) {
-        res.status(500).send(err);
-      }
-      res.json({ tracks });
-    });
+    Track.find()
+      .sort("-created_at")
+      .exec((err, tracks) => {
+        if (err) {
+          res.status(500).send(err);
+        }
+        res.json({ tracks });
+      });
   });
 };
-
-/**
- * Update a track
- * @param req
- * @param res
- * @returns void
- */
 
 /**
  * Get a single track
@@ -66,7 +73,7 @@ exports.getTrack = (req, res) => {
     if (err) {
       res.status(500).send(err);
     }
-    res.json({ track});
+    res.json({ track });
   });
 };
 
@@ -83,12 +90,14 @@ exports.deleteTrack = (req, res) => {
     }
 
     track.remove(() => {
-      Track.find().sort('-created_at').exec((err, tracks) => {
-        if (err) {
-          res.status(500).send(err);
-        }
-        res.json({ tracks });
-      });
+      Track.find()
+        .sort("-created_at")
+        .exec((err, tracks) => {
+          if (err) {
+            res.status(500).send(err);
+          }
+          res.json({ tracks });
+        });
     });
   });
 };
