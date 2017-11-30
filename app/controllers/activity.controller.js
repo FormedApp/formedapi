@@ -35,8 +35,8 @@ exports.addActivity = (req, res) => {
   newActivity.title = sanitizeHtml(req.body.title);
   newActivity.receive = sanitizeHtml(req.body.receive);
   newActivity.respond = sanitizeHtml(req.body.respond);
-  newActivity.reflect = sanitizeHtml(req.body.reflect);
-  newActivity.created_by = req.user._id;
+  newActivity.track_id = sanitizeHtml(req.body.track_id);
+  newActivity.created_by = req.user.id;
   newActivity.save((err, saved) => {
     if (err) {
       res.status(500).send(err);

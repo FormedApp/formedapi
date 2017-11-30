@@ -6,7 +6,6 @@ const ActivitySchema = new Schema({
   title: { type: 'String', required: true },
   receive: { type: 'String', required: true },
   respond: { type: 'String', required: true },
-  reflect: { type: 'String', required: true },
   track_id: { type: 'String'},
   created_at: { type: 'Date', default: Date.now, required: true },
   updated_at: { type: 'Date', default: Date.now, required: true },
